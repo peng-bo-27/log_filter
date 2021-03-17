@@ -1,0 +1,11 @@
+bak=$IFS
+IFS=$'\n' #默认IFS将空格算为下一行，这里只设回车为下一行
+for line in $(cat $3)  #file存放需要筛选的字符串
+do
+	str_first=`echo $line|awk -F\" '{print $2}'`     #以"将line分界，把第二个"之前的赋给str
+	str_second=`echo $line|awk -F\" '{print $4}'`
+	awk -v k="$str_first" -v result="$str_second" 'BEGIN{IGNORECASE=1} /k/ {print result,NR,$0}' $1 >> $2 #忽略大小写输出符合str的行号和那一行
+	#有些awk自定义变量名字无法使用
+done
+IFS=$bak
+
